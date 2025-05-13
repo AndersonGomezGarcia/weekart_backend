@@ -1,6 +1,6 @@
 import pool from "../config/db.js";
 
-export default class weeklyEvent {
+export default class Event {
   constructor({ id, title, description, event_date, image_url }) {
     this.id = id;
     this.title = title;
