@@ -6,15 +6,30 @@ import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
+import cors from 'cors'; // Importar cors si es necesario
+
 import pool from './config/db.js';           // pool inicializado aquí
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import authRouter from './routes/auth.js'; // Carga dinámica de rutas
+
+
 
 // __dirname en ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = dirname(__filename);
 
 const app = express();
+
+
+
+app.use(cors()); // 🔥 esto permite todas las conexiones
+
+// o para permitir solo Vite:
+app.use(cors({
+  origin: 'http://localhost:5173', // puerto típico de Vite
+  credentials: true // si necesitás enviar cookies o cabeceras de autenticación
+}));
 
 // --- Verificar conexión a la DB ---
 pool.on('connect', () => {
@@ -38,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // --- Rutas ---
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter); // Carga dinámica de rutas
 
 // --- Capturar 404 ---
 app.use((req, res, next) => {

@@ -11,6 +11,9 @@ router.get('/', userController.list);
 // Ejemplo: curl -X GET http://localhost:3000/users/1
 router.get('/:id', userController.show);
 
+
+router.get('/email/:email', userController.getUserByEmail);
+
 // POST /users - crea un nuevo usuario
 // Ejemplo: curl -X POST http://localhost:3000/users \
 //   -H 'Content-Type: application/json' \

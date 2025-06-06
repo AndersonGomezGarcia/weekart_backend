@@ -24,6 +24,7 @@ export default {
             res.status(500).json({ message: "Error retrieving user", error });
         }
     },
+    
 
     async create(req, res) {
         const { username, email, password, description, image_url } = req.body;
@@ -61,6 +62,18 @@ export default {
             res.status(200).json(deletedUser);
         } catch (error) {
             res.status(500).json({ message: "Error deleting user", error });
+        }
+    },
+    async getUserByEmail(req, res) {
+        const { email } = req.params;
+        try {
+            const user = await User.getUserByEmail(email);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            res.status(200).json(user);
+        } catch (error) {
+            res.status(500).json({ message: "Error retrieving user by email", error });
         }
     }
 }
