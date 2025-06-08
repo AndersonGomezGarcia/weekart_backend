@@ -24,6 +24,25 @@ export default {
         }
     }, 
 
+    async getVotesByUser(req, res) {
+        const { userId } = req.params;
+        try {
+            const votes = await Vote.getVotesByUserId(userId);
+            res.status(200).json(votes);
+        } catch (error) {
+            res.status(500).json({ message: "Error retrieving votes", error });
+        }
+    },
+
+    async getVotesByPost(req, res) {
+        const { postId } = req.params;
+        try {
+            const votes = await Vote.getVotesByPostId(postId);
+            res.status(200).json(votes);
+        } catch (error) {
+            res.status(500).json({ message: "Error retrieving votes", error });
+        }
+    },
     async create(req, res) {
         const { user_id, post_id, vote_type } = req.body;
         try {

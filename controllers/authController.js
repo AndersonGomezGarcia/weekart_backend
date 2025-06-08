@@ -11,24 +11,34 @@ export default {
         .json({ message: "Email and password are required" });
     }
     try {
-        const user = await User.getUserByEmail(email);
+      const user = await User.getUserByEmail(email);
 
       if (!user) {
-        return res.status(401).json({ message: "Invalid email or password"});
+        return res.status(401).json({ message: "Invalid email or password" });
       }
 
       console.log("Contraseña enviada:", password);
-console.log("Hash en DB:", user.password);
+      console.log("Hash en DB:", user.password);
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(401).json({ message: "Invalid email or password" + email +"  ::  "  + password });
+        return res
+          .status(401)
+          .json({
+            message: "Invalid email or password" + email + "  ::  " + password,
+          });
       }
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "5h",
       });
-      res.status(200).json({ token });
+      res.status(200).json({ token , user: { id: user.id, username: user.username, email: user.email } });
+      console.log("Token generado:", token);        
     } catch (error) {
-      res.status(500).json({ message: "Error logging in"  + await bcrypt.hash(password, 10), error });
+      res
+        .status(500)
+        .json({
+          message: "Error logging in" + (await bcrypt.hash(password, 10)),
+          error,
+        });
     }
   },
   async register(req, res) {

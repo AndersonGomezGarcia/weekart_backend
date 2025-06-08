@@ -56,6 +56,12 @@ export default class User {
     return rows[0] ? new User(rows[0]) : null;
   }
 
+  static async getUserNameById(id) {
+    const text = `SELECT username FROM users WHERE id = $1`;
+    const { rows } = await pool.query(text, [id]);
+    return rows[0] ? rows[0].username : null; // ✅ Devolvemos solo el nombre de usuario
+  }
+
   // Devuelve todos los usuarios
   static async getAllUsers() {
     const text = `SELECT * FROM users `;

@@ -25,16 +25,31 @@ export default class Vote {
         return result.rows[0];
     }
 
+
     static async getAllVotes() {
         const query = 'SELECT * FROM votes';
         const result = await pool.query(query);
         return result.rows.map(row => new Vote(row));   
     }
 
+    static async getVotesByUserId(user_id) {
+        const query = 'SELECT * FROM votes WHERE user_id = $1';
+        const values = [user_id];
+        const result = await pool.query(query, values);
+        return result.rows.map(row => new Vote(row));   
+    }
+
+    static async getVotesByPostId(post_id) {
+        const query = 'SELECT * FROM votes WHERE post_id = $1';
+        const values = [post_id];
+        const result = await pool.query(query, values);
+        return result.rows.map(row => new Vote(row));
+    }
+
     static async updateVote(id, voteData) {
-        const { user_id, event_id, post_id } = voteData;
-        const query = 'UPDATE votes SET user_id = $1, event_id = $2, post_id = $3 WHERE id = $4 RETURNING *';
-        const values = [user_id, event_id, post_id, id];
+        const { user_id, post_id } = voteData;
+        const query = 'UPDATE votes SET user_id = $1, post_id = $2 WHERE id = $3 RETURNING *';
+        const values = [user_id, post_id, id];
         const result = await pool.query(query, values);
         return result.rows[0];  
     }
@@ -46,27 +61,7 @@ export default class Vote {
         return result.rows[0];  
     }
 
-    static async getVotesByUserId(user_id) {
-        const query = 'SELECT * FROM votes WHERE user_id = $1';
-        const values = [user_id];
-        const result = await pool.query(query, values);
-        return result.rows.map(row => new Vote(row));   
-    }
-
-    static async getVotesByEventId(event_id) {
-        const query = 'SELECT * FROM votes WHERE event_id = $1';
-        const values = [event_id];
-        const result = await pool.query(query, values);
-        return result.rows.map(row => new Vote(row));
-    }
-
-    static async getVotesByPostId(post_id) {
-        const query = 'SELECT * FROM votes WHERE post_id = $1';
-        const values = [post_id];
-        const result = await pool.query(query, values);
-        return result.rows.map(row => new Vote(row));
-    }
-
+    
     static async getVotesByCreatedAt(created_at) {
         const query = 'SELECT * FROM votes WHERE created_at = $1';
         const values = [created_at];

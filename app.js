@@ -12,8 +12,9 @@ import pool from './config/db.js';           // pool inicializado aquí
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import authRouter from './routes/auth.js'; // Carga dinámica de rutas
-
-
+import eventsRouter from './routes/events.js'; // Carga dinámica de rutas
+import postsRouter from './routes/posts.js'; // Carga dinámica de rutas
+import votesRouter from './routes/votes.js'; // Carga dinámica de rutas
 
 // __dirname en ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -54,6 +55,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter); // Carga dinámica de rutas
+app.use('/events', eventsRouter);
+app.use('/posts', postsRouter); // Carga dinámica de rutas
+app.use('/votes', votesRouter); // Carga dinámica de rutas
+app.use('/media', express.static(path.join(__dirname, 'media'))); // Servir archivos estáticos de la carpeta 'media'
 
 // --- Capturar 404 ---
 app.use((req, res, next) => {
@@ -69,5 +74,6 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error', { error: err });
 });
+
 
 export default app;
