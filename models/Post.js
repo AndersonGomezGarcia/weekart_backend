@@ -20,16 +20,16 @@ export default class Post {
         this.votes = votes
     }
 
-    static async createPost(id, title, description, user_id, created_at, event_id, image_url) {
-        const text = `
-            INSERT INTO posts (id, title, description, user_id, created_at, event_id, image_url)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING *
-        `;
-        const values = [id, title, description, user_id, created_at, event_id, image_url];
-        const { rows } = await pool.query(text, values);
-        return new Post(rows[0]);
-    }
+   static async createPost({ user_id, event_id, title, description, image_url, createdAt }) {
+    const text = `
+        INSERT INTO posts (user_id, event_id, title, description, image_url, created_at)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *
+    `;
+    const values = [user_id, event_id, title, description, image_url, createdAt];
+    const { rows } = await pool.query(text, values);
+    return new Post(rows[0]);
+}
 
     static async getPostById(id) {
         const query = "SELECT * FROM posts WHERE id = $1";
@@ -80,22 +80,24 @@ export default class Post {
     }   
 
 
-    static async getPostsByuserId(user_id) {
+    static async getPostsByUserId(user_id) {
         const query = "SELECT * FROM posts WHERE user_id = $1";
-        const [rows] = await pool.query(query, [user_id]);
+        const {rows} = await pool.query(query, [user_id]);
+        console.log("Rows:", rows);
+        console.log("User ID:", user_id);
         return rows.map((row) => new Post(row));
     }
 
 
     static async getPostsByTitle(title) {
         const query = "SELECT * FROM posts WHERE title = $1";
-        const [rows] = await pool.query(query, [title]);
+        const {rows} = await pool.query(query, [title]);
         return rows.map((row) => new Post(row));
     }
 
-    static async getPostsBydescription(description) {
+    static async getPostsByDescription(description) {
         const query = "SELECT * FROM posts WHERE description = $1";
-        const [rows] = await pool.query(query, [description]);
+        const {rows} = await pool.query(query, [description]);
         return rows.map((row) => new Post(row));
     }
 

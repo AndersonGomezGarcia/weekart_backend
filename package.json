@@ -17,6 +17,7 @@
     "jade": "~1.11.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
+    "multer": "^2.0.1",
     "pg": "^8.15.6",
     "pg-hstore": "^2.3.4",
     "pg-promise": "^11.13.0"

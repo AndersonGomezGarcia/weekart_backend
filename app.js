@@ -3,10 +3,12 @@ import createError from 'http-errors';
 import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-
+import multer from 'multer'; // Importar multer si es necesario
 import cors from 'cors'; // Importar cors si es necesario
+import  saveImage  from './services/imageStorage.js'; // Importar helper para guardar imágenes
 
 import pool from './config/db.js';           // pool inicializado aquí
 import indexRouter from './routes/index.js';
@@ -23,6 +25,26 @@ const __dirname  = dirname(__filename);
 const app = express();
 
 
+
+dotenv.config(); // Cargar variables de entorno desde .env
+const media = multer({ storage: multer.memoryStorage() });
+
+// Carpeta estática para acceder a las imágenes subidas
+app.use('/media', express.static(path.join(__dirname, 'media')));
+
+// Ruta para subir imágenes
+app.post('/upload', media.single('image'), (req, res) => {
+  try {
+    const info = saveImage(req.file);
+    res.status(200).json({
+      message: 'Imagen guardada correctamente',
+      filename: info.filename,
+      url: `${process.env.BASE_URL}${info.url}`
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 app.use(cors()); // 🔥 esto permite todas las conexiones
 
