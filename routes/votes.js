@@ -11,17 +11,13 @@ router.get('/', voteController.list);
 // Ejemplo: curl -X GET http://localhost:3000/votes/1
 router.get('/:id', voteController.show);
 
-
-
-
 router.get('/user/:userId', voteController.getVotesByUser);
-
-
 
 // GET /votes/post/:postId - muestra los voteos por post
 // Ejemplo: curl -X GET http://localhost:3000/votes/post/1
 router.get('/post/:postId', voteController.getVotesByPost);
 
+router.get('/:userId/:postId', voteController.getVotesByUserAndPost);
 
 // POST /users - crea un nuevo usuario
 // Ejemplo: curl -X POST http://localhost:3000/users \
@@ -38,5 +34,7 @@ router.put('/:id', voteController.update);
 // DELETE /votes/:id - elimina un voteo
 // Ejemplo: curl -X DELETE http://localhost:3000/votes/1
 router.delete('/:id', voteController.delete);
+
+router.delete('/:userId/:postId', voteController.deleteVoteByUserAndPost);
 
 export default router;

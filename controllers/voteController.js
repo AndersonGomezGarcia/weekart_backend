@@ -43,10 +43,20 @@ export default {
             res.status(500).json({ message: "Error retrieving votes", error });
         }
     },
-    async create(req, res) {
-        const { user_id, post_id, vote_type } = req.body;
+
+    async getVotesByUserAndPost(req, res) {
+        const { userId, postId } = req.params;
         try {
-            const newVote = await Vote.createVote({ user_id, post_id, vote_type });
+            const votes = await Vote.getVotesByUserAndPost(userId, postId);
+            res.status(200).json(votes);
+        } catch (error) {
+            res.status(500).json({ message: "Error retrieving votes", error });
+        }
+    },
+    async create(req, res) {
+        const { user_id, post_id } = req.body;
+        try {
+            const newVote = await Vote.createVote({ user_id, post_id, created_at: new Date() });
             res.status(201).json(newVote);
         } catch (error) {
             res.status(500).json({
@@ -82,7 +92,21 @@ export default {
         } catch (error) {
             res.status(500).json({ message: "Error deleting vote", error });
         }
+    },
+
+    async deleteVoteByUserAndPost(req, res) {
+        const { userId, postId } = req.params;
+        try {
+            const deletedVote = await Vote.deleteVoteByUserAndPost(userId, postId);
+            if (!deletedVote) {
+                return res.status(404).json({ message: "Vote not found" });
+            }
+            res.status(200).json({ message: "Vote deleted successfully" });
+        } catch (error) {
+
+            console.log("Error deleting vote:", error);
+            res.status(500).json({ message: "Error deleting vote", error });
+        }
     }
 
 }
-//

@@ -17,6 +17,7 @@ import authRouter from './routes/auth.js'; // Carga dinámica de rutas
 import eventsRouter from './routes/events.js'; // Carga dinámica de rutas
 import postsRouter from './routes/posts.js'; // Carga dinámica de rutas
 import votesRouter from './routes/votes.js'; // Carga dinámica de rutas
+import commentsRouter from './routes/comments.js'; // Carga dinámica de rutas
 
 // __dirname en ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -81,6 +82,7 @@ app.use('/events', eventsRouter);
 app.use('/posts', postsRouter); // Carga dinámica de rutas
 app.use('/votes', votesRouter); // Carga dinámica de rutas
 app.use('/media', express.static(path.join(__dirname, 'media'))); // Servir archivos estáticos de la carpeta 'media'
+app.use('/comments', commentsRouter); // Carga dinámica de rutas
 
 // --- Capturar 404 ---
 app.use((req, res, next) => {

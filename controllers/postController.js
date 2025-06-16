@@ -14,6 +14,35 @@ export default {
     }
   },
 
+  async getPostsByUserId(req, res) {
+    const { userId } = req.params;
+    try {
+      const posts = await Post.getPostsByUserId(userId);
+      res.status(200).json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "Error retrieving posts", error });
+    }
+  },
+
+    async getPostsByEventId(req, res) {
+    const { eventId } = req.params;
+    try {
+        const posts = await Post.getPostsByEventId(eventId);
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json({ message: "Error retrieving posts", error });
+    }
+    },
+  async getPostsByCreatedAt(req, res) {
+    const { created_at } = req.params;
+    try {
+      const posts = await Post.getPostsByCreatedAt(created_at);
+      res.status(200).json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "Error retrieving posts", error });
+    }
+  },
+
   async show(req, res) {
     const { id } = req.params;
     try {
@@ -79,6 +108,7 @@ export default {
       res.status(500).json({ message: "Error updating post", error });
     }
   },
+  
 
   async delete(req, res) {
     const { id } = req.params;
@@ -93,42 +123,7 @@ export default {
     }
   },
 
-  async getPostsByUserId(req, res) {
-    const { userId } = req.params;
-    try {
-      const posts = await Post.getPostsByUserId(userId);
-      res.status(200).json(posts);
-    } catch (error) {
-      res.status(500).json({ message: "Error retrieving posts", error });
-    }
-  },
-  async getPostsByEventId(req, res) {
-    const { eventId } = req.params;
-    try {
-      const posts = await Post.getPostsByEventId(eventId);
-      res.status(200).json(posts);
-    } catch (error) {
-      res.status(500).json({ message: "Error retrieving posts", error });
-    }
-  },
-  async getPostsByEventId(req, res) {
-    const { eventId } = req.params;
-    try {
-      const posts = await Post.getPostsByEventId(eventId);
-      res.status(200).json(posts);
-    } catch (error) {
-      res.status(500).json({ message: "Error retrieving posts", error });
-    }
-  },
-  async getPostsByCreatedAt(req, res) {
-    const { created_at } = req.params;
-    try {
-      const posts = await Post.getPostsByCreatedAt(created_at);
-      res.status(200).json(posts);
-    } catch (error) {
-      res.status(500).json({ message: "Error retrieving posts", error });
-    }
-  },
+  
   async getPostsByContent(req, res) {
     const { content } = req.params;
     try {
